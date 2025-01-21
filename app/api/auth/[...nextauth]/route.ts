@@ -5,23 +5,33 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "Email",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        name: {
+          label: "Name",
+          type: "text",
+          placeholder: "Suraj Vishwakarma",
+        },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "suraj@gmail.com",
+        },
+        phoneNo: {
+          label: "Phone No",
+          type: "text",
+          placeholder: "1234567890",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "********",
+        },
       },
       //@ts-ignore
       async authorize(credentials: any, req) {
-        const { username, password } = credentials;
-        const user = {
-          name: "suraj vishwakarma",
-          email: "suraj@gmail.com",
-          username,
-          password,
-        };
-        console.log(user);
         console.log("logging credentials");
         console.log(credentials);
 
-        return user;
+        return credentials;
       },
     }),
   ],

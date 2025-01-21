@@ -41,6 +41,8 @@ model Transaction {
   type        String    // E.g., "debit" or "credit"
   status      String    // E.g., "completed", "pending"
   createdAt   DateTime  @default(now())
+
+  
   sender      User      @relation("SentTransactions", fields: [senderId], references: [id])
   receiver    User      @relation("ReceivedTransactions", fields: [receiverId], references: [id])
 }
