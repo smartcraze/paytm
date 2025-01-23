@@ -1,11 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import bcrypt from "bcrypt";
+import { RegisterSchema } from "@/zodSchema/Register";
 
-export function POST(req: NextRequest, res: NextResponse) {
-    try {
-        
-    } catch (error) {
-        
+export async function POST(req: NextRequest, res: NextResponse) {
+  try {
+    const { email, password, fullname, phoneNumber } = RegisterSchema.parse(
+      await req.json()
+    );
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return NextResponse.json({ error: "User already exists" });
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        fullName: fullname,
+        phoneNumber,
+        walletBalance: 0,
+      },
+    });
+    return NextResponse.json(
+      { message: "User created successfully", data: newUser },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        error: error.errors,
+        message: "Something went wrong",
+      },
+      { status: 400 }
+    );
+  }
 }
