@@ -1,61 +1,68 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "./db"; 
+import prisma from "./db";
 import bcrypt from "bcrypt";
+import { NextAuthOptions } from "next-auth";
 
-export const authoptions = {
+export const authoptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Email",
       credentials: {
-        fullName: { label: "Full Name", type: "text", placeholder: "Suraj" },
         email: {
           label: "Email",
           type: "email",
-          placeholder: "suraj@gmail.com",
+          placeholder: "example@gmail.com",
         },
-        phone: { label: "Phone", type: "text", placeholder: "1234567890" },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "******",
+        },
       },
       async authorize(credentials) {
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            throw new Error("Email and password are required.");
-          }
-
-          const existingUser = await prisma.user.findUnique({
-            where: { email: credentials.email },
-          });
-
-          if (existingUser) {
-            const isValidPassword = await bcrypt.compare(
-              credentials.password,
-              existingUser.password
-            );
-
-            if (!isValidPassword) {
-              throw new Error("Invalid credentials.");
-            }
-
-            return { email: existingUser.email, name: existingUser.fullName };
-          } else {
-            // Registration Flow
-            const hashedPassword = await bcrypt.hash(credentials.password, 10);
-            const newUser = await prisma.user.create({
-              data: {
-                email: credentials.email,
-                password: hashedPassword,
-                fullName: credentials.fullName,
-                phoneNumber: credentials.phone,
-              },
-            });
-
-            return { email: newUser.email, name: newUser.fullName };
-          }
-        } catch (error) {
-          console.error("Authorization error:", error);
-          throw new Error("Authentication failed.");
+        if (!credentials) {
+          throw new Error("Credentials not provided");
         }
+        const { email, password } = credentials;
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user) {
+          throw new Error("No user found");
+        }
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+          throw new Error("Incorrect password");
+        }
+
+        return {
+          id: user.id.toString(),
+          email: user.email,
+          fullName: user.fullName,
+          phoneNumber: user.phoneNumber,
+          walletBalance: user.walletBalance,
+        };
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      console.log(token);
+      console.log(session);
+
+      session.user = {
+        email: token.email,
+      };
+      return session;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
