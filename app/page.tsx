@@ -22,6 +22,7 @@ export const Appbar = () => {
 
 export function Details() {
   const session = useSession();
+
   console.log(session.data);
   return <div>{JSON.stringify(session.data?.user)}</div>;
 }
