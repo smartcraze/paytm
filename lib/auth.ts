@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "./db"; // Ensure your Prisma client is properly initialized
+import prisma from "./db"; 
 import bcrypt from "bcrypt";
 
 export const authoptions = {
@@ -27,7 +27,6 @@ export const authoptions = {
           });
 
           if (existingUser) {
-            // Login Flow
             const isValidPassword = await bcrypt.compare(
               credentials.password,
               existingUser.password
