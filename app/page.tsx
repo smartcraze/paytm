@@ -5,15 +5,16 @@ import SendMoneyForm from "@/components/SendmoneyDialog";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 import Landing from "@/components/Landing";
+import Creditcard from "@/components/Creditcard";
 
 export default function Home() {
   return (
     <div>
       <Navbar />
       <Landing />
+      <Creditcard />
       <Appbar />
       <Details />
-      {/* <SendMoneyForm /> */}
     </div>
   );
 }

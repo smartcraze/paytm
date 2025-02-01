@@ -10,8 +10,9 @@ function Herosection() {
       <div className="hidden md:block">
         <OnewayTrip />
       </div>
-      <div className="flex justify-center  items-center ">
-        <h1 className="text-black text-3xl font-sans font-bold">
+      
+      <div className="flex flex-col md:flex-row justify-center items-center text-center md:text-left">
+        <h1 className="text-black text-3xl font-sans font-bold mb-4 md:mb-0 md:mr-4">
           Send money to your ❤️ ones
         </h1>
         <SendMoneyButton />
