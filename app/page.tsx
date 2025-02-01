@@ -6,15 +6,16 @@ import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 import Landing from "@/components/Landing";
 import Creditcard from "@/components/Creditcard";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
     <div>
       <Navbar />
       <Landing />
-      <Creditcard />
-      <Appbar />
-      <Details />
+      <Footer />
+      {/* <Appbar />
+      <Details /> */}
     </div>
   );
 }
