@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Paytm: Secure Payment App",
+  title: "Paytm: Secure & Fast UPI Payment App",
   description: "Payments App",
 };
 

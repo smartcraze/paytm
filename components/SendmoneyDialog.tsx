@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation";
+"use client";
 import { useState } from "react";
 import {
   Dialog,
