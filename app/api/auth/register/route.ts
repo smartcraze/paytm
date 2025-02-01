@@ -8,10 +8,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const { email, password, fullname, phoneNumber } = RegisterSchema.parse(
       await req.json()
     );
+
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json({ error: "User already exists" });
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await prisma.user.create({
@@ -20,9 +22,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
         password: hashedPassword,
         fullName: fullname,
         phoneNumber,
-        walletBalance: 0,
+        wallet: {
+          create: {
+            balance: 1000,
+          },
+        },
       },
     });
+
     return NextResponse.json(
       { message: "User created successfully", data: newUser },
       { status: 201 }

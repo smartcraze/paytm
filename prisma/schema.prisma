@@ -13,7 +13,6 @@ model User {
   password      String
   fullName      String
   phoneNumber   String? @unique
-  walletBalance Float   @default(0)
 
   wallet               Wallet?
   transactionsSent     Transaction[]   @relation("SentTransactions")

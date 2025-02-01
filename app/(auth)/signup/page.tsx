@@ -1,117 +1,134 @@
 "use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterSchema } from "@/zodSchema/zod";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
-import React from "react";
 
-function Signup() {
-  const [fullname, setFullname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [error, setError] = React.useState("");
+const SignupForm = () => {
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const router = useRouter();
-  const HandleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fullname: fullname,
-        email: email,
-        phone: phone,
-        password: password,
-      }),
-    });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<z.infer<typeof RegisterSchema>>({
+    resolver: zodResolver(RegisterSchema),
+  });
 
-    const data = await response.json();
+  const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
+    setLoading(true);
+    setServerError("");
+    setSuccessMessage("");
 
-    if (data.error) {
-      setError(data.error);
-    } else {
-      setError("");
-      alert("Sign Up successful");
-      router.push("/auth/signin");
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong");
+      }
+
+      setSuccessMessage("Account created successfully! You can now log in.");
+      reset();
+      router.push("/api/auth/signin");
+    } catch (error: any) {
+      setServerError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center">Sign Up</h1>
-        <form onSubmit={HandleSubmit} className="space-y-4">
-          <div>
-            <label
-              htmlFor="fullname"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Fullname
-            </label>
-            <input
-              type="text"
-              value={fullname}
-              id="fullname"
-              onChange={(e) => setFullname(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <input
-              type="text"
-              value={email}
-              id="email"
-              onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="phone"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Phone
-            </label>
-            <input
-              type="text"
-              value={phone}
-              id="phone"
-              onChange={(e) => setPhone(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              id="password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign Up
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
+      <h2 className="text-2xl font-semibold text-center mb-4">
+        Create Account
+      </h2>
+
+      {serverError && <p className="text-red-500 text-center">{serverError}</p>}
+      {successMessage && (
+        <p className="text-green-500 text-center">{successMessage}</p>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Full Name */}
+        <div>
+          <label className="block text-sm font-medium">Full Name</label>
+          <input
+            type="text"
+            className="w-full border p-2 rounded"
+            placeholder="John Doe"
+            {...register("fullname")}
+          />
+          {errors.fullname && (
+            <p className="text-red-500 text-sm">{errors.fullname.message}</p>
+          )}
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            className="w-full border p-2 rounded"
+            placeholder="example@mail.com"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
+        </div>
+
+        {/* Phone Number */}
+        <div>
+          <label className="block text-sm font-medium">Phone Number</label>
+          <input
+            type="text"
+            className="w-full border p-2 rounded"
+            placeholder="+91 9876543210"
+            {...register("phoneNumber")}
+          />
+          {errors.phoneNumber && (
+            <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
+          )}
+        </div>
+
+        {/* Password */}
+        <div>
+          <label className="block text-sm font-medium">Password</label>
+          <input
+            type="password"
+            className="w-full border p-2 rounded"
+            placeholder="********"
+            {...register("password")}
+          />
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition disabled:bg-gray-400"
+          disabled={loading}
+        >
+          {loading ? "Creating Account..." : "Sign Up"}
+        </button>
+      </form>
     </div>
   );
-}
+};
 
-export default Signup;
+export default SignupForm;

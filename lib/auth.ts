@@ -21,6 +21,9 @@ export const authOptions: NextAuthOptions = {
             where: {
               email: credentials.email,
             },
+            include: {
+              wallet: true,
+            },
           });
 
           if (!user) {
@@ -52,7 +55,6 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.email = user.email;
         token.id = user.id;
-        token.walletBalance = user.walletBalance;
         token.fullName = user.fullName;
       }
       return token;

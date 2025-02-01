@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { getToken } from "next-auth/jwt";
 
 export async function GET(req: NextRequest) {
+  // Get the JWT token
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
@@ -10,8 +11,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // Fetch the wallet using the user's ID from the token
     const wallet = await prisma.wallet.findUnique({
-      where: { userId: parseInt(token.id as string) },
+      where: { userId: token.id as number }, // Look for the wallet by userId
     });
 
     if (!wallet) {
@@ -21,7 +23,8 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    return NextResponse.json(wallet);
+    // Return the balance of the wallet
+    return NextResponse.json({ balance: wallet.balance });
   } catch (error) {
     console.error("Error fetching wallet:", error);
     return NextResponse.json(

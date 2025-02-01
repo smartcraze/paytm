@@ -3,7 +3,6 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  console.log(token);
   const protectedPaths = ["/dashboard", "/profile"];
   const isProtectedRoute = protectedPaths.some((path) =>
     req.nextUrl.pathname.startsWith(path)

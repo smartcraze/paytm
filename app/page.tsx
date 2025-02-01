@@ -1,13 +1,13 @@
 "use client";
+import SendMoneyForm from "@/components/Transaction";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 export default function Home() {
-  
   return (
     <div>
       <Appbar />
       <Details />
-   
+      <SendMoneyForm />
     </div>
   );
 }
