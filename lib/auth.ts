@@ -67,10 +67,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  pages: {
-    signIn: "/",
-    error: "/error",
-  },
+  // pages: {
+  //   signIn: "/signin",
+  //   error: "/signin",
+  // },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,

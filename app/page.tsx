@@ -1,13 +1,13 @@
 "use client";
-import { LoginDialog } from "@/components/Login";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
-
 export default function Home() {
+  
   return (
     <div>
       <Appbar />
       <Details />
+   
     </div>
   );
 }
@@ -15,7 +15,7 @@ export default function Home() {
 export const Appbar = () => {
   return (
     <div>
-      <LoginDialog />
+      <button onClick={() => signIn()}>Sign in</button>
       <button onClick={() => signOut()}>Sign out</button>
     </div>
   );
