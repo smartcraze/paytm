@@ -1,7 +1,7 @@
 "use client";
 import Traveloption from "@/components/TravelOption";
 import Navbar from "@/components/Navbar";
-import SendMoneyForm from "@/components/Transaction";
+import SendMoneyForm from "@/components/SendmoneyDialog";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 import Landing from "@/components/Landing";
