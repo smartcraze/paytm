@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterSchema } from "@/zodSchema/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 const SignupForm = () => {
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ const SignupForm = () => {
 
       setSuccessMessage("Account created successfully! You can now log in.");
       reset();
-      router.push("/api/auth/signin");
+      router.push("/dashboard");
     } catch (error: any) {
       setServerError(error.message);
     } finally {
@@ -51,8 +52,8 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
-      <h2 className="text-2xl font-semibold text-center mb-4">
+    <div className="max-w-md mx-auto w-[24rem] bg-white  p-6 rounded-lg shadow-md mt-10 shadow-blue-700">
+      <h2 className="text-2xl  font-sans font-bold text-center mb-4">
         Create Account
       </h2>
 
@@ -65,11 +66,11 @@ const SignupForm = () => {
         {/* Full Name */}
         <div>
           <label className="block text-sm font-medium">Full Name</label>
-          <input
+          <Input
             type="text"
-            className="w-full border p-2 rounded"
             placeholder="John Doe"
             {...register("fullname")}
+            className="border-black"
           />
           {errors.fullname && (
             <p className="text-red-500 text-sm">{errors.fullname.message}</p>
@@ -79,10 +80,10 @@ const SignupForm = () => {
         {/* Email */}
         <div>
           <label className="block text-sm font-medium">Email</label>
-          <input
+          <Input
             type="email"
-            className="w-full border p-2 rounded"
             placeholder="example@mail.com"
+            className="border-black"
             {...register("email")}
           />
           {errors.email && (
@@ -93,9 +94,9 @@ const SignupForm = () => {
         {/* Phone Number */}
         <div>
           <label className="block text-sm font-medium">Phone Number</label>
-          <input
+          <Input
             type="text"
-            className="w-full border p-2 rounded"
+            className="border-black"
             placeholder="+91 9876543210"
             {...register("phoneNumber")}
           />
@@ -103,13 +104,11 @@ const SignupForm = () => {
             <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
           )}
         </div>
-
-        {/* Password */}
         <div>
           <label className="block text-sm font-medium">Password</label>
-          <input
+          <Input
+            className="border-black"
             type="password"
-            className="w-full border p-2 rounded"
             placeholder="********"
             {...register("password")}
           />
@@ -118,7 +117,6 @@ const SignupForm = () => {
           )}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition disabled:bg-gray-400"

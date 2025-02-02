@@ -15,6 +15,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useNotification } from "../components/Notification";
 import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 type SignInFormData = {
   email: string;
@@ -113,6 +114,11 @@ export default function SignInModal() {
           >
             {loading ? "Signing In..." : "Sign In"}
           </Button>
+          <Link href="/signup" className="p-2">
+            <p className="text-red-500 hover:text-green-500 text-center">
+              Don't have an account? Register here
+            </p>
+          </Link>
         </form>
       </DialogContent>
     </Dialog>
