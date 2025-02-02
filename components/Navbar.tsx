@@ -1,9 +1,13 @@
+"use client";
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CircleUserRound, Download } from "lucide-react";
+import { useSession } from "next-auth/react";
+import SignInModal from "./SignInDialog";
 const Navbar: React.FC = () => {
+  const { data: session, status } = useSession();
   return (
     <div className="bg-white  shadow-md shadow-blue-100 ">
       <div className=" mx-auto flex justify-between items-center py-4 px-6">
@@ -42,13 +46,19 @@ const Navbar: React.FC = () => {
             Download App
           </Button>
 
-          <Button
-            variant="default"
-            className="font-sans font-medium rounded-full bg-blue-700 text-white"
-          >
-            <CircleUserRound />
-            Sign In
-          </Button>
+          {session ? (
+            <Link href="/dashboard">
+              <Button
+                variant="default"
+                className="font-sans font-medium rounded-full bg-blue-700 text-white"
+              >
+                <CircleUserRound />
+                Profile
+              </Button>
+            </Link>
+          ) : (
+            <SignInModal />
+          )}
         </div>
       </div>
     </div>
