@@ -72,7 +72,7 @@ export default function SendMoneyForm() {
         <Input
           type="text"
           {...register("phoneNumber", { required: "Phone number is required" })}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
         />
         {errors.phoneNumber && (
           <p className="text-red-600 text-sm mt-1">
