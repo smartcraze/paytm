@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getToken } from "next-auth/jwt";
 
 export async function POST(req: NextRequest) {
-  const { receiverId, amount } = await req.json();
+  const { receiverId, phoneNumber, amount } = await req.json();
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   if (!token) {
@@ -11,6 +11,28 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    let finalReceiverId = receiverId;
+
+    if (phoneNumber && phoneNumber.length === 10) {
+      const receiver = await prisma.user.findUnique({
+        where: { phoneNumber },
+      });
+      if (!receiver) {
+        return NextResponse.json(
+          { message: "Receiver not found" },
+          { status: 404 }
+        );
+      }
+      finalReceiverId = receiver.id;
+    }
+
+    if (!finalReceiverId) {
+      return NextResponse.json(
+        { message: "Receiver ID or phone number is required" },
+        { status: 400 }
+      );
+    }
+
     const transactionResult = await prisma.$transaction(async (prisma) => {
       const senderWallet = await prisma.wallet.findUnique({
         where: { userId: token.id as number },
@@ -21,18 +43,17 @@ export async function POST(req: NextRequest) {
       }
 
       const receiverWallet = await prisma.wallet.findUnique({
-        where: { userId: receiverId },
+        where: { userId: finalReceiverId },
       });
 
       if (!receiverWallet) {
-        throw new Error("Receiver not found");
+        throw new Error("Receiver wallet not found");
       }
 
-      // Create the transaction record in the Transaction table
       const transaction = await prisma.transaction.create({
         data: {
           senderId: token.id as number,
-          receiverId,
+          receiverId: finalReceiverId,
           amount,
           type: "TRANSFER",
           status: "COMPLETED",
@@ -45,7 +66,7 @@ export async function POST(req: NextRequest) {
       });
 
       await prisma.wallet.update({
-        where: { userId: receiverId },
+        where: { userId: finalReceiverId },
         data: { balance: receiverWallet.balance + amount },
       });
 

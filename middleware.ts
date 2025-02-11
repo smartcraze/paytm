@@ -5,7 +5,7 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const { pathname } = req.nextUrl;
 
-  const isProtectedRoute = ["/dashboard", "/profile"].some((path) =>
+  const isProtectedRoute = ["/dashboard", "/transfer"].some((path) =>
     pathname.startsWith(path)
   );
   const isAuthPage = ["/signin", "/signup"].includes(pathname);
@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if ((pathname === "/" || isAuthPage) && token) {
+  if (isAuthPage && token) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 

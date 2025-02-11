@@ -5,7 +5,11 @@ function Signout() {
   const handleSignOut = () => {
     signOut();
   };
-  return <Button onClick={handleSignOut}>Signout</Button>;
+  return (
+    <Button onClick={handleSignOut} className="">
+      Signout
+    </Button>
+  );
 }
 
 export default Signout;

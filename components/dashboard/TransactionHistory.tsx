@@ -51,7 +51,9 @@ const TransactionHistory = () => {
 
   return (
     <div className="container bg-slate-950 min-h-screen text-white p-6 md:p-10">
-      <h2 className="text-2xl font-bold mb-4">Transaction History</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Transaction History
+      </h2>
 
       {loading ? (
         <p className="text-gray-400">Loading transactions...</p>

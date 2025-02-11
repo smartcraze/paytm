@@ -1,10 +1,13 @@
 import Image from "next/image";
-import PaytmDebitCard from "@/components/dashboard/PaytmDebitCard";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { Wallet, ArrowDownLeft, ArrowUpRight, BadgeCheck } from "lucide-react";
 import TransactionHistory from "@/components/dashboard/TransactionHistory";
 import Signout from "@/components/Signout";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import PaytmDebitCard from "@/components/dashboard/PaytmDebitCard";
+import SendMoneyForm from "@/components/dashboard/SendMoneyForm";
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -17,13 +20,6 @@ export default async function Dashboard() {
             Welcome, {session?.user?.fullName || "John Doe"}
           </h1>
         </div>
-        <Image
-          src="/paytm-logo.svg"
-          width={150}
-          height={150}
-          alt="Paytm Logo"
-          className="h-8 w-auto"
-        />
       </div>
       <div className="flex flex-wrap gap-6 text-lg items-center mt-4">
         <p className="flex items-center gap-2">
@@ -47,8 +43,22 @@ export default async function Dashboard() {
           {session?.user?.sent || "12,800"}
         </p>
         <Signout />
+        <Button variant={"outline"} className="bg-slate-950">
+          <Link href={"transation-history"}>TransactionHistory</Link>
+        </Button>
       </div>
-      <TransactionHistory />
+      <div className="flex flex-col md:flex-row gap-10 justify-center items-center mt-6">
+        <div className=" scale-110 hover:scale-105 transition-transform duration-300">
+          <PaytmDebitCard />
+        </div>
+
+        <div className="text-center md:text-left">
+          <SendMoneyForm />
+        </div>
+      </div>
+      <div className="mt-10">
+        <TransactionHistory />
+      </div>
     </div>
   );
 }
