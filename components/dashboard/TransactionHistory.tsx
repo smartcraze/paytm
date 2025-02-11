@@ -87,12 +87,10 @@ const TransactionHistory = () => {
                     key={transaction.id}
                     className="border border-gray-700 text-gray-300"
                   >
-                    {/* Transaction ID */}
                     <td className="p-3 border border-gray-700">
                       {transaction.id}
                     </td>
 
-                    {/* To / From Information */}
                     <td
                       className={`p-3 border border-gray-700 ${
                         isSent ? "text-red-500" : "text-green-500"
@@ -103,12 +101,10 @@ const TransactionHistory = () => {
                         : `From: ${transactionPartner}`}
                     </td>
 
-                    {/* User ID - Now Fixed */}
                     <td className="p-3 border border-gray-700 text-gray-400">
                       {transactionPartnerId}
                     </td>
 
-                    {/* Amount - Colored */}
                     <td
                       className={`p-3 border border-gray-700 font-bold ${
                         isSent ? "text-red-500" : "text-green-500"
@@ -118,7 +114,6 @@ const TransactionHistory = () => {
                       {transaction.amount}
                     </td>
 
-                    {/* Status */}
                     <td
                       className={`p-3 border border-gray-700 ${
                         transaction.status === "COMPLETED"
@@ -129,7 +124,6 @@ const TransactionHistory = () => {
                       {transaction.status}
                     </td>
 
-                    {/* Date */}
                     <td className="p-3 border border-gray-700">
                       {new Date(transaction.createdAt).toLocaleString()}
                     </td>
