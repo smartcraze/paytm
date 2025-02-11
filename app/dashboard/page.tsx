@@ -1,3 +1,4 @@
+import PaytmDebitCard from "@/components/dashboard/PaytmDebitCard";
 import Signout from "@/components/Signout";
 import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/auth";
@@ -46,6 +47,9 @@ async function Dashboard() {
           </Link>
           <Signout />
         </div>
+      </div>
+      <div>
+        <PaytmDebitCard />
       </div>
     </div>
   );
