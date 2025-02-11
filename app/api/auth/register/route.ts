@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { RegisterSchema } from "@/zodSchema/zod";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password, fullname, phoneNumber } = RegisterSchema.parse(
       await req.json()

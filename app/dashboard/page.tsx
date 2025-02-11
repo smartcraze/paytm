@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { Wallet, ArrowDownLeft, ArrowUpRight, BadgeCheck } from "lucide-react";
