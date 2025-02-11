@@ -1,8 +1,8 @@
-import SignupForm from "@/components/Signup";
+import SignInForm from "@/components/SignInform";
 import Image from "next/image";
 import Link from "next/link";
 
-function Signup() {
+function Signin() {
   return (
     <div className="bg-blue-100 min-h-screen flex items-center justify-center px-4">
       <div className="container mx-auto flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-16">
@@ -39,12 +39,13 @@ function Signup() {
           </div>
         </div>
 
+        {/* Right Section - Sign In Form */}
         <div className="lg:w-1/2 flex flex-col items-center">
-          <SignupForm />
+          <SignInForm />
 
-          <Link href="/signin" className="mt-4">
+          <Link href="/signup" className="mt-4">
             <p className="text-red-500 hover:text-green-500 text-center">
-              Already have an account? Sign In
+              Don't have an account? Sign up
             </p>
           </Link>
         </div>
@@ -53,4 +54,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Signin;

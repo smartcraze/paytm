@@ -43,7 +43,7 @@ const SignupForm = () => {
 
       setSuccessMessage("Account created successfully! You can now log in.");
       reset();
-      router.push("/dashboard");
+      router.push("/signin");
     } catch (error: any) {
       setServerError(error.message);
     } finally {

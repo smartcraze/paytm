@@ -4,10 +4,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CircleUserRound, Download } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import SignInModal from "./SignInDialog";
 const Navbar: React.FC = () => {
   const { data: session, status } = useSession();
+
+  const handlesignout = () => {
+    signOut();
+  };
   return (
     <div className="bg-white  shadow-md shadow-blue-100 ">
       <div className=" mx-auto flex justify-between items-center py-4 px-6">
@@ -34,8 +38,8 @@ const Navbar: React.FC = () => {
           <Link href="/paytm-business">
             <p className="">Paytm for Business</p>
           </Link>
-          <Link href="/company">
-            <p className="">Company</p>
+          <Link href="/paytm-business">
+            <p className="">Movies</p>
           </Link>
         </nav>
 

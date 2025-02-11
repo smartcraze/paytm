@@ -1,19 +1,18 @@
 import { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
-  interface Session {
-    user: {
-      id: Number;
-      email: string;
-      walletBalance: Number;
-      fullName: string;
-    } & DefaultSession["user"];
+  export interface Wallet {
+    balance: number;
   }
 
   interface User {
-    id: Number;
+    id: number;
     email: string;
-    walletBalance: Number;
     fullName: string;
+    wallet?: Wallet;
+  }
+
+  interface Session {
+    user: User & DefaultSession["user"];
   }
 }

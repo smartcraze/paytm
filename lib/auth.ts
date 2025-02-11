@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "./db";
-import bcrypt from "bcrypt";
-import { NextAuthOptions } from "next-auth";
+import bcrypt from "bcryptjs";
+import { NextAuthOptions, Wallet } from "next-auth";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
           if (!user) {
             throw new Error("No user found with this email");
           }
+          console.log("user details are :", user);
 
           const isValid = await bcrypt.compare(
             credentials.password,
@@ -39,10 +40,10 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Invalid password");
           }
 
-          return {
-            id: user.id,
-            email: user.email,
-          };
+          if (user) {
+            return user;
+          }
+          return null;
         } catch (error) {
           console.error("Auth error:", error);
           throw error;
@@ -56,6 +57,7 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.id = user.id;
         token.fullName = user.fullName;
+        token.wallet = user.wallet?.balance;
       }
       return token;
     },
@@ -63,16 +65,18 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as number;
         session.user.email = token.email as string;
-        session.user.walletBalance = token.walletBalance as number;
         session.user.fullName = token.fullName as string;
+        session.user.wallet = { balance: token.wallet } as Wallet;
       }
       return session;
     },
   },
-  // pages: {
-  //   signIn: "/signin",
-  //   error: "/",
-  // },
+
+  pages: {
+    signIn: "/signin",
+    signOut: "/",
+    error: "/signin",
+  },
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
