@@ -33,13 +33,11 @@ export default async function Dashboard() {
         </p>
         <p className="flex items-center gap-2">
           <ArrowDownLeft size={20} className="text-green-500" />
-          <span className="text-gray-500">Money Received:</span> ₹
-          {session?.user?.received || "28,500"}
+          <span className="text-gray-500">Money Received:</span> ₹{"28,500"}
         </p>
         <p className="flex items-center gap-2">
           <ArrowUpRight size={20} className="text-red-500" />
-          <span className="text-gray-500">Money Sent:</span> ₹
-          {session?.user?.sent || "12,800"}
+          <span className="text-gray-500">Money Sent:</span> ₹{"12,800"}
         </p>
         <Signout />
         <Button variant={"outline"} className="bg-slate-950">
