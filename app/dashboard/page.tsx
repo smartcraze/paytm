@@ -1,58 +1,54 @@
+import Image from "next/image";
 import PaytmDebitCard from "@/components/dashboard/PaytmDebitCard";
-import Signout from "@/components/Signout";
-import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-async function Dashboard() {
+import { Wallet, ArrowDownLeft, ArrowUpRight, BadgeCheck } from "lucide-react";
+import TransactionHistory from "@/components/dashboard/TransactionHistory";
+import Signout from "@/components/Signout";
+
+export default async function Dashboard() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
-      <div className="p-8 bg-gray-800 rounded-2xl shadow-lg w-full max-w-md text-center">
-        <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
-
-        {session ? (
-          <div className="text-lg text-gray-300 space-y-3">
-            <p>
-              <span className="font-semibold text-blue-400">Name:</span>{" "}
-              {session.user.fullName || "Not provided"}
-            </p>
-            <p>
-              <span className="font-semibold text-blue-400">id:</span>{" "}
-              {session.user.id || "Not provided"}
-            </p>
-            <p>
-              <span className="font-semibold text-blue-400">Email:</span>{" "}
-              {session.user.email}
-            </p>
-            <p>
-              <span className="font-semibold text-blue-400">
-                Wallet Balance:
-              </span>{" "}
-              ${session.user.wallet?.balance ?? "0"}
-            </p>
-          </div>
-        ) : (
-          <p className="text-red-400">No session data found.</p>
-        )}
-
-        <div className="mt-6">
-          <Link
-            href={"/"}
-            className="px-6 py-2 bg-blue-500 hover:bg-blue-600 transition-all rounded-full text-white font-semibold"
-          >
-            Go to Profile
-          </Link>
-          <Signout />
+    <div className="container bg-slate-950 min-h-screen text-white p-6 md:p-10">
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">
+            Welcome, {session?.user?.fullName || "John Doe"}
+          </h1>
         </div>
+        <Image
+          src="/paytm-logo.svg"
+          width={150}
+          height={150}
+          alt="Paytm Logo"
+          className="h-8 w-auto"
+        />
       </div>
-      <div>
-        <PaytmDebitCard />
+      <div className="flex flex-wrap gap-6 text-lg items-center mt-4">
+        <p className="flex items-center gap-2">
+          <BadgeCheck size={20} className="text-yellow-500" />
+          <span className="text-gray-500">ID:</span> PAYTM
+          {session?.user?.id || "89745"}
+        </p>
+        <p className="flex items-center gap-2">
+          <Wallet size={20} className="text-blue-500" />
+          <span className="text-gray-500">Total Balance:</span> ₹
+          {session?.user?.wallet?.balance}
+        </p>
+        <p className="flex items-center gap-2">
+          <ArrowDownLeft size={20} className="text-green-500" />
+          <span className="text-gray-500">Money Received:</span> ₹
+          {session?.user?.received || "28,500"}
+        </p>
+        <p className="flex items-center gap-2">
+          <ArrowUpRight size={20} className="text-red-500" />
+          <span className="text-gray-500">Money Sent:</span> ₹
+          {session?.user?.sent || "12,800"}
+        </p>
+        <Signout />
       </div>
+      <TransactionHistory />
     </div>
   );
 }
-
-export default Dashboard;
