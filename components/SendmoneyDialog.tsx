@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "./ui/input";
-import { signIn, signOut } from "next-auth/react";
 
 export default function SendMoneyButton() {
   const [open, setOpen] = useState(false);
@@ -114,7 +113,7 @@ export default function SendMoneyButton() {
               Send Money
             </Button>
           </form>
-          
+
           {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
           {success && (
             <p className="text-green-600 mt-4 text-center">{success}</p>
@@ -124,4 +123,3 @@ export default function SendMoneyButton() {
     </>
   );
 }
-

@@ -15,7 +15,7 @@ const eslintConfig = [
     rules: {
 
       "@typescript-eslint/no-explicit-any": "off",
-      "quates": ["off"]
+      'react/no-unescaped-entities': 'off',
     },
   },
 ];

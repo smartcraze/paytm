@@ -8,16 +8,13 @@ import { signOut, useSession } from "next-auth/react";
 import SignInModal from "./SignInDialog";
 const Navbar: React.FC = () => {
   const { data: session, status } = useSession();
-
-  const handlesignout = () => {
-    signOut();
-  };
   return (
     <div className="bg-white  shadow-md shadow-blue-100 ">
       <div className=" mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center pl-4 ">
           <Image
             src="/paytm-logo.svg"
+            
             width={150}
             height={150}
             alt="Paytm Logo"
@@ -39,7 +36,7 @@ const Navbar: React.FC = () => {
             <p className="">Paytm for Business</p>
           </Link>
           <Link href="/paytm-business">
-            <p className="">Movies</p>
+            <p className="">Paytm for Business</p>
           </Link>
         </nav>
 
