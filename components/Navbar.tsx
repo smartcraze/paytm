@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CircleUserRound, Download } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import SignInModal from "./SignInDialog";
 const Navbar: React.FC = () => {
   const { data: session, status } = useSession();
@@ -14,7 +14,6 @@ const Navbar: React.FC = () => {
         <div className="flex items-center pl-4 ">
           <Image
             src="/paytm-logo.svg"
-            
             width={150}
             height={150}
             alt="Paytm Logo"
