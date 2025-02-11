@@ -19,7 +19,7 @@ function OnewayTrip() {
     "2 Travellers, Business",
     "1 Traveller, Premium Economy",
   ];
-  const [selectedFare, setSelectedFare] = useState(null);
+  const [selectedFare, setSelectedFare] = useState<string | null>(null);
 
   const fares = [
     { name: "Armed Forces", discount: "Up to ₹600 off" },
